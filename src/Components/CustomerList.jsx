@@ -1,6 +1,6 @@
 const CustomerList = ({ customers, onEdit, onDelete }) => {
   return (
-    <div className="w-64 p-4 bg-white shadow-lg rounded-lg">
+    <div className="w-full lg:w-64 p-4 bg-white shadow-lg rounded-lg">
       <h3 className="text-xl font-semibold mb-4">Customers</h3>
       <div className="overflow-auto max-h-96">
         {customers.map((customer) => (

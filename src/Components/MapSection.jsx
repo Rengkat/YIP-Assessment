@@ -39,7 +39,7 @@ const MapSection = ({ onAddCustomer, customers, predefinedLocation }) => {
   };
 
   return (
-    <LoadScript googleMapsApiKey={import.meta.env.local.VITE_MAP_KEY}>
+    <LoadScript googleMapsApiKey={import.meta.env.VITE_MAP_KEY}>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         zoom={10}
