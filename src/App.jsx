@@ -12,8 +12,6 @@ const App = () => {
 
       <CustomerForm />
 
-      <CustomerForm />
-
       <div className="w-full md:w-64 p-4 bg-white shadow-lg">
         <CustomerList />
       </div>
