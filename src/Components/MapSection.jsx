@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, InfoWindow, Polyline } from "@react-google-maps/api";
+
 const mapContainerStyle = {
   width: "100%",
   height: "100vh",
@@ -49,8 +50,11 @@ const MapSection = ({ onAddCustomer, customers, predefinedLocation }) => {
         {/* Render markers for each customer */}
         {customers.map((customer) => (
           <Marker
-            key={customer.id}
-            position={{ lat: customer.lat, lng: customer.lng }}
+            key={customer._id}
+            position={{
+              lat: customer.location.coordinates[1], // latitude
+              lng: customer.location.coordinates[0], // longitude
+            }}
             onClick={() => setSelectedMarker(customer)}
           />
         ))}
@@ -59,10 +63,13 @@ const MapSection = ({ onAddCustomer, customers, predefinedLocation }) => {
         {predefinedLocation &&
           customers.map((customer) => (
             <Polyline
-              key={customer.id}
+              key={customer._id}
               path={[
                 { lat: predefinedLocation.lat, lng: predefinedLocation.lng },
-                { lat: customer.lat, lng: customer.lng },
+                {
+                  lat: customer.location.coordinates[1], // latitude
+                  lng: customer.location.coordinates[0], // longitude
+                },
               ]}
               options={{
                 strokeColor: "#FF0000",
@@ -71,10 +78,14 @@ const MapSection = ({ onAddCustomer, customers, predefinedLocation }) => {
               }}
             />
           ))}
+
         {/* Render InfoWindow for the selected marker */}
         {selectedMarker && (
           <InfoWindow
-            position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}
+            position={{
+              lat: selectedMarker.location.coordinates[1], // latitude
+              lng: selectedMarker.location.coordinates[0], // longitude
+            }}
             onCloseClick={() => setSelectedMarker(null)}>
             <div>
               <h3>{selectedMarker.name}</h3>

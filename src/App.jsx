@@ -18,10 +18,9 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return distance.toFixed(2);
 };
 
-const mockedCustomers = [];
-
 const App = () => {
-  const [customers, setCustomers] = useState(mockedCustomers);
+  const [customers, setCustomers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [predefinedLocation, setPredefinedLocation] = useState(null);
@@ -49,41 +48,147 @@ const App = () => {
     }
   }, []);
 
-  const addCustomer = (customerData) => {
-    if (predefinedLocation) {
-      const distance = calculateDistance(
-        predefinedLocation.lat,
-        predefinedLocation.lng,
-        customerData.lat,
-        customerData.lng
+  // Fetch customers from the backend
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch("http://localhost:5000/api/customers");
+        if (!res.ok) {
+          throw new Error("Failed to fetch customers");
+        }
+        const data = await res.json();
+
+        // Calculate distances for each customer
+        const customersWithDistance = data.map((customer) => ({
+          ...customer,
+          distance: calculateDistance(
+            predefinedLocation.lat,
+            predefinedLocation.lng,
+            customer.location.coordinates[1], // latitude
+            customer.location.coordinates[0] // longitude
+          ),
+        }));
+
+        setCustomers(customersWithDistance);
+      } catch (error) {
+        console.error("Error fetching customers:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCustomers();
+  }, [predefinedLocation]); // Re-fetch customers if predefinedLocation changes
+
+  // Add a new customer
+  const addCustomer = async (customerData) => {
+    try {
+      if (predefinedLocation) {
+        const response = await fetch("http://localhost:5000/api/customers", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: customerData.name,
+            address: customerData.address,
+            contact: customerData.contact,
+            latitude: customerData.lat,
+            longitude: customerData.lng,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to add customer");
+        }
+
+        // Fetch the updated list of customers
+        const fetchResponse = await fetch("http://localhost:5000/api/customers");
+        if (!fetchResponse.ok) {
+          throw new Error("Failed to fetch updated customers");
+        }
+        const updatedCustomers = await fetchResponse.json();
+
+        // Calculate distances for the updated customers
+        const customersWithDistance = updatedCustomers.map((customer) => ({
+          ...customer,
+          distance: calculateDistance(
+            predefinedLocation.lat,
+            predefinedLocation.lng,
+            customer.location.coordinates[1], // latitude
+            customer.location.coordinates[0] // longitude
+          ),
+        }));
+
+        // Update the state with the new list of customers
+        setCustomers(customersWithDistance);
+      }
+    } catch (error) {
+      console.error("Error adding customer:", error);
+    }
+  };
+  // Update an existing customer
+  const handleUpdateCustomer = async (updatedCustomer) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/customers/${updatedCustomer._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: updatedCustomer.name,
+          address: updatedCustomer.address,
+          contact: updatedCustomer.contact,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update customer");
+      }
+
+      const data = await response.json();
+      setCustomers((prev) =>
+        prev.map((customer) =>
+          customer._id === updatedCustomer._id ? { ...customer, ...data } : customer
+        )
       );
-      const newCustomer = { id: Date.now(), ...customerData, distance };
-      setCustomers((prev) => [...prev, newCustomer]);
+      setEditingCustomer(null);
+    } catch (error) {
+      console.error("Error updating customer:", error);
     }
   };
 
+  // Delete a customer
+  const handleDeleteCustomer = async (customerId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/customers/${customerId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete customer");
+      }
+
+      setCustomers((prev) => prev.filter((customer) => customer._id !== customerId));
+    } catch (error) {
+      console.error("Error deleting customer:", error);
+    }
+  };
+
+  // Handle adding a new customer
   const handleAddCustomerClick = (location) => {
     setSelectedLocation(location);
     setShowForm(true);
   };
 
+  // Close the form
   const handleFormClose = () => {
     setShowForm(false);
   };
 
+  // Handle editing a customer
   const handleEditCustomer = (customer) => {
     setEditingCustomer(customer);
-  };
-
-  const handleUpdateCustomer = (updatedCustomer) => {
-    setCustomers((prev) =>
-      prev.map((customer) => (customer.id === updatedCustomer.id ? updatedCustomer : customer))
-    );
-    setEditingCustomer(null);
-  };
-
-  const handleDeleteCustomer = (customerId) => {
-    setCustomers((prev) => prev.filter((customer) => customer.id !== customerId));
   };
 
   return (
