@@ -1,8 +1,88 @@
-# React + Vite
+# Customer Location Pinning System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based system where users can pin customer locations on a Google Map interface. The system allows users to add customer information along with their location and display the distance from a predefined location.
 
-Currently, two official plugins are available:
+## Features
+- **Google Maps Integration**: Users can add pins by clicking on the map.
+- **Customer Information**: Users can input customer details (name, address, contact) and associate them with the pinned location.
+- **Distance Calculation**: The system calculates and displays the distance from a predefined location to each pinned customer location.
+- **Database Integration**: Customer data is stored in a MongoDB database.
+- **Responsive UI**: The interface is clean and works on various screen sizes.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies Used
+- **Frontend**: React, Google Maps API
+- **Backend**: Node.js, Express, MongoDB
+- **Other Libraries**: Mongoose (for MongoDB), Nodemon
+
+## Project Structure
+```
+customer-location-pinning-system/
+├── backend/
+│   ├── controllers/
+│   │   └── customerController.js
+│   ├── models/
+│   │   └── customerModel.js
+│   ├── routes/
+│   │   └── customerRoutes.js
+│   ├── server.js
+│   ├── package.json
+│   └── .env
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── Components/
+│   │   │   ├── MapSection.jsx
+│   │   │   ├── CustomerForm.jsx
+│   │   │   └── CustomerList.jsx
+│   │   ├── App.js
+│   │   ├── index.js
+│   │   └── styles.css
+│   ├── package.json
+│   └── README.md
+├── README.md
+└── .gitignore
+```
+
+## Setup Instructions
+
+### Prerequisites
+- Node.js and npm installed
+- MongoDB installed and running
+- Google Maps API key
+
+### Backend Setup
+1. Navigate to the `backend` folder:
+   ```bash
+   cd backend
+2. Install dependencies:
+   ```bash
+   npm install
+3. Create a `.env` file in the backend folder and add your MongoDB connection string and Google Maps API key:
+   ```bash
+   MONGODB_URI=mongodb://localhost:27017/customerDB
+   
+4. Start the backend server:
+   ```bash
+   npm start
+
+### Backend Setup
+1. Navigate to the `frontend` folder:
+   ```bash
+   cd frontend
+2. Install dependencies:
+   ```bash
+   npm install
+3. Create a `.env` file in the `frontend` folder and add your Google Maps API key:
+   ```bash
+   VITE_MAP_KEY=your-google-maps-api-key
+4. Start the frontend development server:
+   ```bash
+   npm run dev
+### Demonstration
+
+https://github.com/user-attachments/assets/6be369cf-d41c-403a-9f42-9fba5380e5c5
+
+
+### Hosting
+   - Backend to render [Render](https://render.com) 
+   - Frontend to vercel [Vercel](https://yip-assessment-frontend.vercel.app/) 
