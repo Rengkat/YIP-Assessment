@@ -80,9 +80,10 @@ customer-location-pinning-system/
    npm run dev
 ### Demonstration
 
-https://github.com/user-attachments/assets/6be369cf-d41c-403a-9f42-9fba5380e5c5
+https://github.com/user-attachments/assets/540ae313-4499-47d7-924c-aae5d6cc9be3
+
 
 
 ### Hosting
-   - Backend to render [Render](https://render.com) 
+   - Backend to render [Render](https://yip-assessment-backend.onrender.com) 
    - Frontend to vercel [Vercel](https://yip-assessment-frontend.vercel.app/) 
