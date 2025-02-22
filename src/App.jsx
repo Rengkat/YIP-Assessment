@@ -53,7 +53,7 @@ const App = () => {
     const fetchCustomers = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch("http://localhost:5000/api/customers");
+        const res = await fetch("https://yip-assessment-backend.onrender.com/api/customers");
         if (!res.ok) {
           throw new Error("Failed to fetch customers");
         }
@@ -84,7 +84,7 @@ const App = () => {
   const addCustomer = async (customerData) => {
     try {
       if (predefinedLocation) {
-        const response = await fetch("http://localhost:5000/api/customers", {
+        const response = await fetch("https://yip-assessment-backend.onrender.com/api/customers", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -103,7 +103,9 @@ const App = () => {
         }
 
         // Fetch the updated list of customers
-        const fetchResponse = await fetch("http://localhost:5000/api/customers");
+        const fetchResponse = await fetch(
+          "https://yip-assessment-backend.onrender.com/api/customers"
+        );
         if (!fetchResponse.ok) {
           throw new Error("Failed to fetch updated customers");
         }
@@ -130,17 +132,20 @@ const App = () => {
   // Update an existing customer
   const handleUpdateCustomer = async (updatedCustomer) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/customers/${updatedCustomer._id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: updatedCustomer.name,
-          address: updatedCustomer.address,
-          contact: updatedCustomer.contact,
-        }),
-      });
+      const response = await fetch(
+        `https://yip-assessment-backend.onrender.com/api/customers/${updatedCustomer._id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: updatedCustomer.name,
+            address: updatedCustomer.address,
+            contact: updatedCustomer.contact,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update customer");
@@ -161,9 +166,12 @@ const App = () => {
   // Delete a customer
   const handleDeleteCustomer = async (customerId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/customers/${customerId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `https://yip-assessment-backend.onrender.com/api/customers/${customerId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to delete customer");
