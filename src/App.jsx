@@ -48,7 +48,7 @@ const App = () => {
     }
   }, []);
 
-  // Fetch customers from the backend
+  // Fetch customers
   useEffect(() => {
     const fetchCustomers = async () => {
       setIsLoading(true);
